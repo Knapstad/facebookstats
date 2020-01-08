@@ -1,4 +1,4 @@
 secrets/
 pages.json
 gammel.py
-
+__pycache__/
