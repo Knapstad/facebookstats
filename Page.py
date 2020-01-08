@@ -173,18 +173,20 @@ class Page:
         dataJson = requests.get(url, verify=False).json()["data"]
         return dataJson
 
-    def getInstaStats(
-        self, since: str = "", until: str = "", period: str = "", date_preset: str = ""
+    def getInstagramImpressions(
+                self, since: str = "", until: str = "", period: str = "&period=day", date_preset: str = ""
     ) -> json:
+        """Gets the impression and reach from instagram, perod defaults to day as intagram api requires perod to be set."""
         if since is not "":
             since = f"&since={since}"
         if until is not "":
             until = f"&untill={until}"
-        if period is not "":
+        if period is not "day":
             period = f"&period={period}"
         if date_preset is not "":
             date_preset = f"&date_preset={date_preset}"
-        metrics = ""
+        metrics = "impressions, reach"
         url = f"https://graph.facebook.com/v{self.apiversion}/{self.instagramId}/insights/{metrics}?{self.accessToken}{since}{until}{period}{date_preset}"
-        dataJson = requests.get(url, verify=False).json()["data"]
+        dataJson = requests.get(url, verify=False).json()
+
         return dataJson
