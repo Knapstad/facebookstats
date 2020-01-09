@@ -16,7 +16,7 @@ class Page:
         self.pageUrl = pageUrl
         self.pageLikes = pageLikes
         self.adId = "411915349314027"
-        self.apiversion = "3.3"
+        self.apiversion = "5.0"
         self.accessToken = f"access_token={Page.findAccesstoken(self.userName)}"
         self.graphUrl = f"https://graph.facebook.com/v{self.apiversion}/{self.pageId}"
         self.adUrl = f"https://graph.facebook.com/v{self.apiversion}/act_{self.adId}/ads?fields=creative{{effective_object_story_id}}"
@@ -61,7 +61,7 @@ class Page:
             userName=response["username"],
             pageUrl=response["link"],
             pageLikes=response["fan_count"],
-            instagramId=response["instagram_business_account"]
+            instagramId=response["instagram_business_account"]["id"]
         )
 
 
@@ -141,9 +141,7 @@ class Page:
             if page["username"] == name:
                 return page["access_token"]
 
-    def getPageImpressions(
-        self, since: str = "", until: str = "", period: str = "", date_preset: str = ""
-    ) -> json:
+    def getFacebookMetrics(self, since: str = "", until: str = "", period: str = "", date_preset: str = "", metrics: str = ""):
         if since is not "":
             since = f"&since={since}"
         if until is not "":
@@ -152,10 +150,16 @@ class Page:
             period = f"&period={period}"
         if date_preset is not "":
             date_preset = f"&date_preset={date_preset}"
-        metrics = "page_impressions_unique,page_impressions_organic_unique,page_impressions_paid_unique"
         url = f"https://graph.facebook.com/v{self.apiversion}/{self.userName}/insights/{metrics}?{self.accessToken}{since}{until}{period}{date_preset}"
         dataJson = requests.get(url, verify=False).json()["data"]
         return dataJson
+        
+
+    def getPageImpressions(
+        self, since: str = "", until: str = "", period: str = "", date_preset: str = ""
+    ) -> json:
+        metrics = "page_impressions_unique,page_impressions_organic_unique,page_impressions_paid_unique"
+        return self.getFacebookMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
 
     def getPageLikes(
         self, since: str = "", until: str = "", period: str = "", date_preset: str = ""
@@ -172,6 +176,26 @@ class Page:
         url = f"https://graph.facebook.com/v{self.apiversion}/{self.userName}/insights/{metrics}?{self.accessToken}{since}{until}{period}{date_preset}"
         dataJson = requests.get(url, verify=False).json()["data"]
         return dataJson
+
+    def getPageReactions(
+        self, since: str = "", until: str = "", period: str = "day", date_preset: str = ""
+    ) -> json:
+        if since is not "":
+            since = f"&since={since}"
+        if until is not "":
+            until = f"&untill={until}"
+        if period is not "":
+            period = f"&period={period}"
+        if date_preset is not "":
+            date_preset = f"&date_preset={date_preset}"
+        metrics = "page_actions_post_reactions_total"
+        url = f"https://graph.facebook.com/v{self.apiversion}/{self.userName}/insights/{metrics}?{self.accessToken}{since}{until}{period}{date_preset}"
+        dataJson = requests.get(url, verify=False).json()["data"]
+        return dataJson
+
+    # def getPage
+
+    
 
     def getInstagramImpressions(
                 self, since: str = "", until: str = "", period: str = "&period=day", date_preset: str = ""
