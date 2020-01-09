@@ -164,18 +164,8 @@ class Page:
     def getPageLikes(
         self, since: str = "", until: str = "", period: str = "", date_preset: str = ""
     ) -> json:
-        if since is not "":
-            since = f"&since={since}"
-        if until is not "":
-            until = f"&untill={until}"
-        if period is not "":
-            period = f"&period={period}"
-        if date_preset is not "":
-            date_preset = f"&date_preset={date_preset}"
         metrics = "page_fans,page_fan_adds,page_fan_removes"
-        url = f"https://graph.facebook.com/v{self.apiversion}/{self.userName}/insights/{metrics}?{self.accessToken}{since}{until}{period}{date_preset}"
-        dataJson = requests.get(url, verify=False).json()["data"]
-        return dataJson
+        return self.getFacebookMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
 
     def getPageReactions(
         self, since: str = "", until: str = "", period: str = "day", date_preset: str = ""
