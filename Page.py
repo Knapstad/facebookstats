@@ -175,12 +175,10 @@ class Page:
 
     # def getPage
 
-    
-
     def getInstagramImpressions(
                 self, since: str = "", until: str = "", period: str = "&period=day", date_preset: str = ""
     ) -> json:
-        """Gets the impression and reach from instagram, perod defaults to day as intagram api requires perod to be set."""
+        """Gets the impression and reach from instagram, perod defaults to day as intagram api requires period to be set."""
         if since is not "":
             since = f"&since={since}"
         if until is not "":
