@@ -187,8 +187,26 @@ class Page:
             period = f"&period={period}"
         if date_preset is not "":
             date_preset = f"&date_preset={date_preset}"
-        metrics = "impressions, reach, profile_views, website_clicks, text_message_clicks "
+        metrics = "impressions, reach, profile_views, website_clicks, text_message_clicks, follower_count"
         url = f"https://graph.facebook.com/v{self.apiversion}/{self.instagramId}/insights/{metrics}?{self.accessToken}{since}{until}{period}{date_preset}"
         dataJson = requests.get(url, verify=False).json()
-
         return dataJson
+
+    def getInstagramFollowers(
+                self, since: str = "", until: str = "", period: str = "&period=day", date_preset: str = ""
+    ) -> json:
+        """Gets the impression and reach from instagram, perod defaults to day as intagram api requires period to be set."""
+        if since is not "":
+            since = f"&since={since}"
+        if until is not "":
+            until = f"&untill={until}"
+        if period is not "&period=day":
+            period = f"&period={period}"
+        if date_preset is not "":
+            date_preset = f"&date_preset={date_preset}"
+        metrics = "followers_count, media_count"
+        url = f"https://graph.facebook.com/v{self.apiversion}/{self.instagramId}?fields={metrics}&{self.accessToken}{since}{until}{period}{date_preset}"
+        dataJson = requests.get(url, verify=False).json()
+        return dataJson
+
+
