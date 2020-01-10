@@ -187,7 +187,7 @@ class Page:
             period = f"&period={period}"
         if date_preset is not "":
             date_preset = f"&date_preset={date_preset}"
-        metrics = "impressions, reach"
+        metrics = "impressions, reach, profile_views, website_clicks, text_message_clicks "
         url = f"https://graph.facebook.com/v{self.apiversion}/{self.instagramId}/insights/{metrics}?{self.accessToken}{since}{until}{period}{date_preset}"
         dataJson = requests.get(url, verify=False).json()
 
