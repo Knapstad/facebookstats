@@ -141,7 +141,7 @@ class Page:
             if page["username"] == name:
                 return page["access_token"]
 
-    def getFacebookMetrics(self, since: str = "", until: str = "", period: str = "", date_preset: str = "", metrics: str = ""):
+    def getMetrics(self, since: str = "", until: str = "", period: str = "", date_preset: str = "", metrics: str = ""):
         if since is not "":
             since = f"&since={since}"
         if until is not "":
@@ -159,19 +159,19 @@ class Page:
         self, since: str = "", until: str = "", period: str = "", date_preset: str = ""
     ) -> json:
         metrics = "page_impressions_unique,page_impressions_organic_unique,page_impressions_paid_unique"
-        return self.getFacebookMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
+        return self.getMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
 
     def getPageLikes(
         self, since: str = "", until: str = "", period: str = "", date_preset: str = ""
     ) -> json:
         metrics = "page_fans,page_fan_adds,page_fan_removes"
-        return self.getFacebookMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
+        return self.getMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
 
     def getPageReactions(
         self, since: str = "", until: str = "", period: str = "day", date_preset: str = ""
     ) -> json:
         metrics = "page_actions_post_reactions_total"
-        return self.getFacebookMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
+        return self.getMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
 
     # def getPage
 
@@ -183,7 +183,7 @@ class Page:
             since = f"&since={since}"
         if until is not "":
             until = f"&untill={until}"
-        if period is not "day":
+        if period is not "&period=day":
             period = f"&period={period}"
         if date_preset is not "":
             date_preset = f"&date_preset={date_preset}"
