@@ -7,16 +7,18 @@ disable_warnings()
 
 
 class Page:
+    
     def __init__(
         self, *, pageId: str, userName: str, pageName: str, pageUrl: str, pageLikes: int, instagramId: str
     ):
+        config = json.load(open("secrets/config.json"))
         self.pageId = pageId
         self.userName = userName
         self.pageName = pageName
         self.pageUrl = pageUrl
         self.pageLikes = pageLikes
-        self.adId = "411915349314027"
-        self.apiversion = "5.0"
+        self.adId = config["ad_accout_id"]
+        self.apiversion = config["api_version"]
         self.accessToken = f"access_token={Page.findAccesstoken(self.userName)}"
         self.graphUrl = f"https://graph.facebook.com/v{self.apiversion}/{self.pageId}"
         self.adUrl = f"https://graph.facebook.com/v{self.apiversion}/act_{self.adId}/ads?fields=creative{{effective_object_story_id}}"
@@ -36,7 +38,8 @@ class Page:
 
     @classmethod
     def fromName(cls, name: str) -> "Page":
-        apiversion = "3.2"
+        config = json.load(open("secrets/config.json"))
+        apiversion = config["api_version"]
         accessToken = f"access_token={Page.findAccesstoken(name)}"
         url = f"https://graph.facebook.com/v{apiversion}/{name}?fields=link,username,name,id,fan_count,instagram_business_account&{accessToken}"
         response = requests.get(url, verify=False).json()
@@ -51,7 +54,8 @@ class Page:
 
     @classmethod
     def fromId(cls, pageId: str) -> "Page":
-        apiversion = "3.2"
+        config = json.load(open("secrets/config.json"))
+        apiversion = config["api_version"]
         accessToken = f"access_token={Page.findAccesstoken(pageId)}"
         url = f"https://graph.facebook.com/v{apiversion}/{pageId}?fields=link,username,id,name,fan_count,instagram_business_account&{accessToken}"
         response = requests.get(url, verify=False).json()
@@ -126,7 +130,7 @@ class Page:
 
     def getAllIds(self) -> list:
         adIds = self.getAdIds()
-        postIds = get.postIds()
+        postIds = self.getPostIds()
         return postIds + adIds
 
     @staticmethod
@@ -172,6 +176,13 @@ class Page:
     ) -> json:
         metrics = "page_actions_post_reactions_total"
         return self.getMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
+
+    def getPageReach(
+        self, since: str = "", until: str = "", period: str = "day", date_preset: str = ""
+    ) -> json:
+        metrics = "page_actions_post_reactions_total"
+        return self.getMetrics(since=since, until=until, period=period, date_preset=date_preset, metrics=metrics)
+
 
     # def getPage
 
