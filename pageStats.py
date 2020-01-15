@@ -39,9 +39,9 @@ def deliver_payload():
     "facebook_page_post_reactions" : sum(facebook_reactions[0].get("values")[0].get("value").values()),
     "instagram_impressions" : instagram_stats.get("data",[{}])[0].get("values",[{}])[-1].get("value",0),
     "instagram_reach" : instagram_stats.get("data",[{}])[1].get("values",[{}])[-1].get("value",0),
-    "instagtram_profile_views" : instagram_stats.get("data",[{}])[2].get("values",[{}])[-1].get("value",0),
-    "instagtram_website_clicks" : instagram_stats.get("data",[{}])[3].get("values",[{}])[-1].get("value",0),
-    "instagtram_text_message_clicks" : instagram_stats.get("data",[{}])[4].get("values",[{}])[-1].get("value",0),
+    "instagram_profile_views" : instagram_stats.get("data",[{}])[2].get("values",[{}])[-1].get("value",0),
+    "instagram_website_clicks" : instagram_stats.get("data",[{}])[3].get("values",[{}])[-1].get("value",0),
+    "instagram_text_message_clicks" : instagram_stats.get("data",[{}])[4].get("values",[{}])[-1].get("value",0),
     "instagram_followers": instagram_followers.get("followers_count", 0),
     "instagram_media_count": instagram_followers.get("media_count", 0),
     "date":  (datetime.datetime.now()-datetime.timedelta(hours=1)).isoformat()[0:-3]+"Z",
@@ -50,6 +50,7 @@ def deliver_payload():
     ]
     requests.post(endpoint, json=payload, verify=False)
     print(payload[0]["date"])
+    print(payload[0])
 
 if __name__ == "__main__":
     while True:
